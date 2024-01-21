@@ -33,7 +33,7 @@ function NavBar() {
     window.location.reload();
   };
   return (
-    <div className="flex border-t-2 border-black justify-between w-full px-2 bg-teal-300">
+    <div className="flex border-t-2 border-black justify-between w-full px-2 bg-white">
       {/*emarald-200*/}
       <span className="text-lg font-semibold w-48 tracking-wider">
         🗓 {new Date().toDateString()}

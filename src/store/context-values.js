@@ -11,11 +11,13 @@ export const Context = React.createContext({
   setNotification: ({ color, data, loading = false }) => {},
   alertModal: { msg: "", visible: "" },
   setAlertModal: ({ msg, visible }) => {},
+  ongoingMeeting: null,
+  setOngoingMeeting: (meeting) => {},
 });
 // eslint-disable-next-line
 export default (props) => {
   const [tokenValue, setTokenValue] = useState(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRoYWJ1MjIxMkBnbWFpbC5jb20iLCJfaWQiOiI2NWExNDEwZjliNDRmZTE0ZDc1OGQ4NTMiLCJpYXQiOjE3MDU3NTk5NjEsImV4cCI6MTcwNTg0NjM2MX0.FcAQr_M2f4POQhdHtdiErWfxovBVZ66ZuyTecgeHmGE"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRoYWJ1MjIxMkBnbWFpbC5jb20iLCJfaWQiOiI2NWExNDEwZjliNDRmZTE0ZDc1OGQ4NTMiLCJpYXQiOjE3MDU4NDc2NjUsImV4cCI6MTcwNTkzNDA2NX0.sEBIxtwOxEcrm6EoIKE_eTAw0DXEcFLYPVucB67-ito"
   );
   const [socketObjectValue, setSocketObjectValue] = useState(null);
   const [socketValue, setSocketValue] = useState(null);
@@ -28,6 +30,7 @@ export default (props) => {
     msg: "",
     visible: false,
   });
+  const [ongoingMeetingValue, setOngoingMeetingValue] = useState(null);
   return (
     <Context.Provider
       value={{
@@ -36,11 +39,13 @@ export default (props) => {
         socketObject: socketObjectValue,
         notification: notificationValue,
         alertModal: alertModalValue,
+        ongoingMeeting: ongoingMeetingValue,
         setToken: setTokenValue,
         setSocket: setSocketValue,
         setNotification: setNotificationValue,
         setSocketObject: setSocketObjectValue,
         setAlertModal: setAlertModalValue,
+        setOngoingMeeting: setOngoingMeetingValue,
       }}
     >
       {props.children}

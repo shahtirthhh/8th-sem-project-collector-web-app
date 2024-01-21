@@ -121,7 +121,48 @@ function Notifications() {
       }
     };
   }, []);
-
+  const clear_all_notifications = async () => {
+    setNotification_context({
+      color: "blue",
+      data: "🧼 clearing !",
+      loading: true,
+    });
+    const { data } = await axios({
+      method: "post", //you can set what request you want to be
+      url: process.env.REACT_APP_API,
+      data: {
+        query: `
+            mutation($meetings:[InputMeeting],$complaints:[InputComplaint],$reports:[InputReport]){
+              setNotificationsAsSeen(meetings:$meetings,complaints:$complaints,reports:$reports)
+            }`,
+        variables: {
+          meetings,
+          reports,
+          complaints,
+        },
+      },
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (data.errors) {
+      setNotification_context({
+        color: "red",
+        data: "💀 Something went wrong !",
+      });
+    } else {
+      setNotification_context({
+        color: "green",
+        data: "🧹 cleared !",
+      });
+      setMeetings(null);
+      setComplaints(null);
+      setReports(null);
+      fetchMeetings();
+      fetchComplaints();
+      fetchReports();
+    }
+  };
   useEffect(() => {
     fetchMeetings();
     fetchComplaints();
@@ -138,52 +179,74 @@ function Notifications() {
           <h1 className="font-medium text-center">📩 Inbox Empty !</h1>
         )}
       {/* Meetings */}
+      {((meetings && meetings.length >= 1) ||
+        (reports && reports.length >= 1) ||
+        (complaints && complaints.length >= 1)) && (
+        <button
+          onClick={clear_all_notifications}
+          className=" rounded-xl transition-all font-medium duration-300 p-1 hover:after:content-['clear_all'] hover:bg-red-300 "
+        >
+          ❌
+        </button>
+      )}
+      {meetings &&
+      complaints &&
+      reports &&
+      (meetings.length >= 1 ||
+        reports.length >= 1 ||
+        complaints.length >= 1) ? (
+        <div className="w-full h-full flex flex-col gap-2">
+          <ul className="border-2 rounded-[2rem] bg-orange-200 border-black p-3  w-full h-[33.33%]">
+            <h1 className="font-bold text-center w-full ">🤝🏻 Meetings</h1>
+            <div className="flex rounded-[2rem] h-[90%] flex-col justify-center overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
+              {meetings && meetings.length >= 1 ? (
+                meetings.map((meeting) => {
+                  return (
+                    <li
+                      key={meeting._id}
+                      className="text-left m-1 font-medium tracking-wide"
+                    >
+                      • {new Date(meeting.date).toDateString()} — {meeting.slot}
+                    </li>
+                  );
+                })
+              ) : (
+                <span className="font-medium text-center">📭 Empty ! </span>
+              )}
+            </div>
+          </ul>
 
-      <ul className="border-2 rounded-[2rem] bg-orange-200 border-black p-3  w-full h-[33.33%]">
-        <h1 className="font-bold text-center w-full ">🤝🏻 Meetings</h1>
-        <div className="flex rounded-[2rem] h-[90%] flex-col justify-center overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
-          {meetings && meetings.length >= 1 ? (
-            meetings.map((meeting) => (
-              <li
-                key={meeting._id}
-                className="text-left m-1 font-medium tracking-wide"
-              >
-                • {new Date(meeting.date).toDateString()} — {meeting.slot}
-              </li>
-            ))
-          ) : (
-            <span className="font-medium text-center">📭 Empty ! </span>
-          )}
+          {/* Complaints */}
+
+          <ul className="border-2 border-black bg-pink-300  p-3 h-[33.33%] w-full flex rounded-[2rem]  flex-col justify-start ">
+            <h1 className="font-bold text-center">😡 Complaints</h1>
+            <div className="flex rounded-[2rem] h-[90%] flex-col justify-center  overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
+              {complaints && complaints.length >= 1 ? (
+                complaints.map((complaint) => (
+                  <li key={complaint._id}>new complaint</li>
+                ))
+              ) : (
+                <span className="font-medium text-center">📭 Empty ! </span>
+              )}
+            </div>
+          </ul>
+
+          {/* Reports */}
+
+          <ul className="border-2 bg-indigo-200 border-black  p-3 h-[33.33%] w-full flex rounded-[2rem]  flex-col justify-start ">
+            <h1 className="font-bold text-center">🕵🏻‍♀️ Reports</h1>
+            <div className="flex rounded-[2rem] h-[90%] flex-col justify-center overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
+              {reports && reports.length >= 1 ? (
+                reports.map((report) => <li key={report._id}>new Report</li>)
+              ) : (
+                <span className="font-medium text-center">📭 Empty ! </span>
+              )}
+            </div>
+          </ul>
         </div>
-      </ul>
-
-      {/* Complaints */}
-
-      <ul className="border-2 border-black bg-pink-300  p-3 h-[33.33%] w-full flex rounded-[2rem]  flex-col justify-start ">
-        <h1 className="font-bold text-center">😡 Complaints</h1>
-        <div className="flex rounded-[2rem] h-[90%] flex-col justify-center  overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
-          {complaints && complaints.length >= 1 ? (
-            complaints.map((complaint) => (
-              <li key={complaint._id}>new complaint</li>
-            ))
-          ) : (
-            <span className="font-medium text-center">📭 Empty ! </span>
-          )}
-        </div>
-      </ul>
-
-      {/* Reports */}
-
-      <ul className="border-2 bg-indigo-200 border-black  p-3 h-[33.33%] w-full flex rounded-[2rem]  flex-col justify-start ">
-        <h1 className="font-bold text-center">🕵🏻‍♀️ Reports</h1>
-        <div className="flex rounded-[2rem] h-[90%] flex-col justify-center overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
-          {reports && reports.length >= 1 ? (
-            reports.map((report) => <li key={report._id}>new Report</li>)
-          ) : (
-            <span className="font-medium text-center">📭 Empty ! </span>
-          )}
-        </div>
-      </ul>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

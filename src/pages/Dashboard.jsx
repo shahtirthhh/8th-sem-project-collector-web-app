@@ -11,7 +11,7 @@ function Dashboard() {
   //     navigate("/");
   //   }
   return (
-    <div className="flex flex-col items-center bg-teal-300">
+    <div className="flex flex-col items-center bg-white">
       <Header />
       <NavBar />
       <Outlet />

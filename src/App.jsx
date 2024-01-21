@@ -15,6 +15,7 @@ import ReportsContainer from "./components/dashboard/ReportsContainer";
 import SuccessContainer from "./components/dashboard/SuccessContainer";
 import Notification from "./components/UI/Notification";
 import AlertModal from "./components/UI/AlertModal";
+import VirtualMeeting from "./pages/VirtualMeeting";
 
 const ROUTER = createBrowserRouter([
   // Homepage paths
@@ -28,6 +29,7 @@ const ROUTER = createBrowserRouter([
     element: <Dashboard />,
     children: [
       { index: true, element: <HomeContainer /> },
+      { path: "virtual-meeting", element: <VirtualMeeting /> },
       { path: "meetings", element: <MeetingsContainer /> },
       { path: "complaints", element: <ComplaintsContainer /> },
       { path: "notice-board", element: <NoticeContainer /> },

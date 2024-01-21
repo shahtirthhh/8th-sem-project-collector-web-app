@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Context } from "../../../store/context-values";
 import InputModal from "../../UI/InputModal";
 import Modal from "../../UI/Modal";
+import { useNavigate } from "react-router-dom";
 
 const query_generator = (query) => {
   return {
@@ -14,8 +15,16 @@ function UpcomingMeetings() {
   const token = useContext(Context).token;
   const setNotification_context = useContext(Context).setNotification;
   const setAlertModal_context = useContext(Context).setAlertModal;
+  const setOngoingMeeting_context = useContext(Context).setOngoingMeeting;
+  const socketObject_context = useContext(Context).socketObject;
+
+  const navigate = useNavigate();
+
   const [meetings, setMeetings] = useState(null);
   const [reason, setReason] = useState("");
+
+  const [citizen, setCitizen] = useState(null);
+  const [citizenSocket, setCitizenSocket] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
   const [answer, setAnswer] = useState(null);
@@ -29,6 +38,20 @@ function UpcomingMeetings() {
   const [confirmMeeting, setConfirmMeeting] = useState(null);
 
   const [meetingsToday, setMeetingsToday] = useState(null);
+  const [ongoingMeeting, setOngoingMeeting] = useState(null);
+
+  useEffect(() => {
+    socketObject_context.on("citizen-ready-to-join", (data) => {
+      setNotification_context({
+        color: "blue",
+        data: `${data.citizen_email} wants to join ! 👤`,
+      });
+      setCitizen(data.citizen_email);
+      setCitizenSocket(data.citizen);
+    });
+  }, [socketObject_context]);
+
+  const join_meeting = () => {};
 
   const proceed_to_confirm_meeting = async () => {
     setNotification_context({
@@ -207,6 +230,18 @@ function UpcomingMeetings() {
                     <span className="font-medium tracking-wider">
                       ⏰ {meeting.slot}
                     </span>
+                    {meeting.from === citizen && (
+                      <button
+                        onClick={() => {
+                          meeting.from = citizenSocket;
+                          setOngoingMeeting_context(meeting);
+                          navigate("virtual-meeting");
+                        }}
+                        className="text-sm hover:bg-green-500 hover:scale-105 transition-all bg-green-300 border-2 border-green-700  rounded-xl text-black font-semibold p-1"
+                      >
+                        📞 Accept
+                      </button>
+                    )}
                     <div className="flex gap-2">
                       {meeting.cancel ? (
                         <span className="font-medium text-red-600">
