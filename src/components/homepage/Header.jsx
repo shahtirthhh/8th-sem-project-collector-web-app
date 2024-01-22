@@ -12,6 +12,7 @@ function Header() {
   const token = useContext(Context).token;
   const socket = useContext(Context).socket;
   const setNotification_context = useContext(Context).setNotification;
+  const ongoingMeeting_context = useContext(Context).ongoingMeeting;
 
   const [broadcasted, setBroadcasted] = useState(false);
   const change_status = async () => {
@@ -59,20 +60,24 @@ function Header() {
           Collector of Rajkot
         </span>
       </div>
-      {broadcasted ? (
-        <button
-          onClick={() => setBroadcasted(false)}
-          className="fixed right-3 top-8 h-fit text-sm hover:bg-red-500 hover:scale-105 transition-all bg-red-300 border-2 border-red-700  rounded-xl text-black font-semibold p-1"
-        >
-          🔒 close connections
-        </button>
-      ) : (
-        <button
-          onClick={() => setBroadcasted(true)}
-          className="fixed right-3 top-8 h-fit text-sm hover:bg-green-500 hover:scale-105 transition-all bg-green-300 border-2 border-green-700  rounded-xl text-black font-semibold p-1"
-        >
-          💻 I'm ready
-        </button>
+      {!ongoingMeeting_context && (
+        <div>
+          {broadcasted ? (
+            <button
+              onClick={() => setBroadcasted(false)}
+              className="fixed right-3 top-8 h-fit text-sm hover:bg-red-500 hover:scale-105 transition-all bg-red-300 border-2 border-red-700  rounded-xl text-black font-semibold p-1"
+            >
+              🔒 close connections
+            </button>
+          ) : (
+            <button
+              onClick={() => setBroadcasted(true)}
+              className="fixed right-3 top-8 h-fit text-sm hover:bg-green-500 hover:scale-105 transition-all bg-green-300 border-2 border-green-700  rounded-xl text-black font-semibold p-1"
+            >
+              💻 I'm ready
+            </button>
+          )}
+        </div>
       )}
 
       {/* <img className="w-24 h-24" src={bhupa_image} alt="bhupa" /> */}

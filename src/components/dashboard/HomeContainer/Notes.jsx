@@ -53,6 +53,7 @@ function Notes() {
     setNotification_context({
       color: "blue",
       data: "💾 Saving...",
+      loading: true,
     });
     const { data } = await axios({
       method: "post", //you can set what request you want to be
@@ -117,7 +118,7 @@ function Notes() {
   }, []);
 
   return (
-    <div className="border-2 border-black  p-1 w-[33.33%] flex rounded-[2rem] bg-yellow-200  flex-col justify-start items-center">
+    <div className="border-2 border-black  p-1 w-[33.33%] flex rounded-[2rem] bg-amber-50  flex-col justify-start items-center">
       {!notes && <h2 className="font-bold text-center">💀 Error !</h2>}
       {notes && notes.length >= 1 && (
         <ul className="p-3 mt-4 flex flex-col w-full h-[20rem] overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">

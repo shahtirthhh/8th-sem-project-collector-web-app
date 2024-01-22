@@ -35,6 +35,7 @@ function PreviousMeetings() {
             confirm
             cancel
             missed
+            happen
           }
         }
       `),
@@ -135,7 +136,7 @@ function PreviousMeetings() {
                     }`}
                   >
                     {meeting.happen
-                      ? "😸 was Confirmed !"
+                      ? "😸 Attended !"
                       : "was confirmed, but no-one joined ! 😑"}
                   </span>
                 ) : (

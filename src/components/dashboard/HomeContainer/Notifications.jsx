@@ -67,6 +67,7 @@ function Notifications() {
         {
           complaints{
             _id
+            location
             seen
             department
             location
@@ -169,7 +170,10 @@ function Notifications() {
     fetchReports();
   }, []);
   return (
-    <div className="border-2 border-black gap-2 p-3 w-[33.33%] flex rounded-[2rem] bg-gray-300  flex-col  items-center">
+    <div className="border-2 border-black gap-2 p-3 w-[33.33%] flex rounded-[2rem] bg-amber-50  flex-col  items-center">
+      {(!meetings || !complaints || !reports) && (
+        <h1 className="font-medium text-center">⌛ Loading...</h1>
+      )}
       {meetings &&
         complaints &&
         reports &&
@@ -223,7 +227,13 @@ function Notifications() {
             <div className="flex rounded-[2rem] h-[90%] flex-col justify-center  overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-w-2 gap-2 scrollbar-thumb-rounded-lg scrollbar-track-transparent ">
               {complaints && complaints.length >= 1 ? (
                 complaints.map((complaint) => (
-                  <li key={complaint._id}>new complaint</li>
+                  <li
+                    key={complaint._id}
+                    className="text-left m-1 font-medium tracking-wide"
+                  >
+                    • {complaint.location.slice(0, 11)}... -{" "}
+                    {complaint.department} department
+                  </li>
                 ))
               ) : (
                 <span className="font-medium text-center">📭 Empty ! </span>

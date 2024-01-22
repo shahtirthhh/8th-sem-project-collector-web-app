@@ -7,13 +7,14 @@ import NavBar from "../components/dashboard/NavBar";
 function Dashboard() {
   const navigate = useNavigate();
   const token = useContext(Context).token;
+  const ongoingMeeting_context = useContext(Context).ongoingMeeting;
   //   if (!token) {
   //     navigate("/");
   //   }
   return (
     <div className="flex flex-col items-center bg-white">
       <Header />
-      <NavBar />
+      {!ongoingMeeting_context && <NavBar />}
       <Outlet />
     </div>
   );

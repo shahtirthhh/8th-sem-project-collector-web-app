@@ -9,16 +9,16 @@ function Modal({ msg, showModal, onAnswer }) {
             <span className="text-2xl text-center font-bold">{msg}</span>
             <div className="flex flex-row mt-20 justify-center">
               <button
-                onClick={() => onAnswer(true)}
-                className="text-xl border-2 text-black bg-green-200 border-green-600 py-1 px-2 w-32 rounded-lg m-2 font-semibold hover:bg-green-500 hover:scale-105 transition-all"
-              >
-                CONFIRM
-              </button>
-              <button
                 onClick={() => onAnswer(false)}
                 className="text-xl bg-red-200 text-black border-2 border-red-600 py-1 px-2 w-32 rounded-lg m-2 font-semibold hover:bg-red-500 hover:scale-105 transition-all"
               >
                 CANCEL
+              </button>
+              <button
+                onClick={() => onAnswer(true)}
+                className="text-xl border-2 text-black bg-green-200 border-green-600 py-1 px-2 w-32 rounded-lg m-2 font-semibold hover:bg-green-500 hover:scale-105 transition-all"
+              >
+                CONFIRM
               </button>
             </div>
           </div>

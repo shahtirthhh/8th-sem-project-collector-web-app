@@ -51,8 +51,6 @@ function UpcomingMeetings() {
     });
   }, [socketObject_context]);
 
-  const join_meeting = () => {};
-
   const proceed_to_confirm_meeting = async () => {
     setNotification_context({
       color: "blue",
@@ -157,6 +155,7 @@ function UpcomingMeetings() {
             overview
             confirm
             cancel
+            happen
           }
         }
       `),
@@ -205,7 +204,7 @@ function UpcomingMeetings() {
     fetchMeetings();
   }, [fetchMeetings]);
   return (
-    <div className="border-2 border-black  p-3 w-[33.33%] flex rounded-[2rem] bg-fuchsia-200  flex-col justify-start items-center">
+    <div className="border-2 border-black  p-3 w-[33.33%] flex rounded-[2rem] bg-amber-50  flex-col justify-start items-center">
       {!meetings && <h2 className="font-bold text-center">💀 Error !</h2>}
       {meetingsToday && meetingsToday.length < 1 && (
         <h2 className="font-bold text-center">No upcoming meetings !</h2>
@@ -220,7 +219,9 @@ function UpcomingMeetings() {
                   key={meeting._id}
                   className={`border-2 border-black p-4 flex flex-col gap-2 rounded-3xl ${
                     meeting.confirm
-                      ? "bg-emerald-200"
+                      ? meeting.happen
+                        ? "bg-emerald-500"
+                        : "bg-emerald-200"
                       : meeting.cancel
                       ? "bg-rose-200"
                       : "bg-sky-200"
@@ -262,8 +263,12 @@ function UpcomingMeetings() {
                         )
                       )}
                       {meeting.confirm ? (
-                        <span className="font-medium text-green-600">
-                          😸 Confirmed !
+                        <span
+                          className={`font-medium ${
+                            meeting.happen ? "text-black" : "text-green-600"
+                          }`}
+                        >
+                          {meeting.happen ? "💁🏻‍♂️ Attended" : "😸 Confirmed !"}
                         </span>
                       ) : (
                         !meeting.cancel && (
